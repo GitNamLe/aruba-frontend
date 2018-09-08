@@ -2,10 +2,6 @@ html, body {
   background-color: gray;
 }
 
-body {
-  padding: 10px;
-}
-
 /* .btn-fade {
   color: #fff;
   cursor: pointer;
@@ -25,7 +21,7 @@ body {
   transition: all 150ms linear;
 }
 
- */
+ 
 
 .btn-fade:hover {
   color: #0e1111;
@@ -33,4 +29,79 @@ body {
   text-decoration: none;
   text-shadow: -1px -1px 0 slategray;
   transition: all 250ms linear;
+}*/
+
+.admin-view {
+  padding: 10%;
+  background-image: url('./night-life.jpg');
+}
+
+.pic { 
+  height: 100%;
+}
+
+.duration {
+  height: 100%;
+  padding: 10px;
+  vertical-align: top;
+  display: inline-block;
+  width: 10%;
+}
+
+.song-artist {
+  height: 100%;
+  padding: 20px;
+  vertical-align: top;
+  display: inline-block;
+  width: 60%;
+}
+
+.track-item {
+  background: lightgray;
+  margin: 20px;
+  height: 100px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.track-item:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+
+.search-bar-container {
+  margin: 40px;
+  padding: 10px;
+  border: none;
+  transition: .25s ease-in-out;
+}
+
+.search-bar-icon {
+  display: inline-block;
+  height: 40px;
+  background: transparent;
+}
+
+.search-bar-container:hover {
+  border: solid 3px gainsboro;
+  border-radius: 33px;
+  transition: .25s ease-in-out;
+}
+
+.search-bar-input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  height: 100%;
+  font-size: 33px;
+}
+
+.form {
+  height: 100%;
+  display: inline-block;
+  padding-left: 10px;
+}
+
+svg{
+  fill: currentColor;
+  color: white;
 }

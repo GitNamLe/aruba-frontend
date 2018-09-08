@@ -41,18 +41,11 @@ class App extends Component {
     }))
   }
 
-
   render() {
     return (
       <div className="App">
         {this.state.user ?
         <div>
-          <h1 style={{...defaultStyle, 
-            'fontSize': '54px',
-            'marginTop': '5px'
-          }}>
-            {this.state.user.name}'s Playlists
-          </h1>
           <WebPlayer />
         </div> : <button onClick={() => {
             window.location = window.location.href.includes('localhost') 
