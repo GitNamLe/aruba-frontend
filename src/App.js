@@ -53,11 +53,6 @@ class App extends Component {
           }}>
             {this.state.user.name}'s Playlists
           </h1>
-          <button id="happy" className="btn-fade">Happy</button>
-          <button id="tired" className="btn-fade">Tired</button>
-          <button id="sad" className="btn-fade">Sad</button>
-          <button id="excited" className="btn-fade">Excited</button>
-          <button id="chill" className="btn-fade">Chill</button>
           <WebPlayer />
         </div> : <button onClick={() => {
             window.location = window.location.href.includes('localhost') 
