@@ -5,3 +5,32 @@ html, body {
 body {
   padding: 10px;
 }
+
+.btn-fade {
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 45px;
+  margin: 0 0 2em;
+  max-width: 160px;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: 100%;
+  background: seagreen;
+  border: 1px solid white;
+  box-shadow: 0px 1px 0 slategray;
+  letter-spacing: 1px;
+  transition: all 150ms linear;
+}
+
+
+
+.btn-fade:hover {
+  color: #0e1111;
+  background: transparent;
+  text-decoration: none;
+  text-shadow: -1px -1px 0 slategray;
+  transition: all 250ms linear;
+}
