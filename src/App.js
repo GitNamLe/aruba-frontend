@@ -85,6 +85,7 @@ class App extends Component {
         :  <div>
             <div className="navbar">
               <h1>Aruba</h1>
+              
             </div>
               <div className="intro">
                 <p className="message">JOIN A ROOM</p>
