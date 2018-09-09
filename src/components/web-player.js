@@ -19,7 +19,7 @@ const customStyles = {
 };
 
 export default class WebPlayer extends Component {
-    work = [];
+    player = '';
     constructor(props) {
         super(props);
         let parsed = queryString.parse(window.location.search);
@@ -29,19 +29,73 @@ export default class WebPlayer extends Component {
         deviceId: "",
         error: "",
         searchTerm: '',
-        playlistTracks: []
+        playlistTracks: [],
+        searchResults: [],
+        token: parsed.access_token
         };
 
-        this.onSearch = this.onSearch.bind(this);
 
+        this.onSearch = this.onSearch.bind(this);
         this.openModal = this.openModal.bind(this);
-        this.afterOpenModal = this.afterOpenModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.onAddSong = this.onAddSong.bind(this);
+        this.getPlaylistTracks = this.getPlaylistTracks.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
     }
 
-  async componentDidMount() {
-    //spotifyWebApi.createPlaylist('namnomnom', {name: 'Weaponized Roombas'},function(err) {console.log(err)});
+  componentDidMount() {
+    this.getPlaylistTracks();
+  }
 
+  createEventHandlers() {
+    this.player.on('player_state_changed', state => this.onStateChanged(state));
+    this.player.on('initialization_error', e => { console.error(e); });
+    this.player.on('authentication_error', e => {
+      console.error(e);
+      this.setState({ loggedIn: false });
+    });
+    this.player.on('account_error', e => { console.error(e); });
+    this.player.on('playback_error', e => { console.error(e); });
+  
+    // Playback status updates
+    this.player.on('player_state_changed', state => { console.log(state); });
+  
+    // Ready
+    this.player.on('ready', async data => {
+      let { device_id } = data;
+      console.log("Let the music play on!");
+      await this.setState({ deviceId: device_id });
+    });
+  }
+
+  handleLogin() {
+    if (this.state.token !== "") {
+      this.setState({ loggedIn: true });
+    }
+    this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
+  }
+
+  checkForPlayer() {
+    const { token } = this.state;
+  
+    console.log(token);
+    if (window.Spotify !== null) {
+      clearInterval(this.playerCheckInterval);
+      this.player = new window.Spotify.Player({
+        name: "Matt's Spotify Player",
+        getOAuthToken: cb => { cb(this.state.token); },
+      });
+      this.createEventHandlers();
+  
+      // finally, connect!
+      this.player.connect();
+    }
+
+  }
+  
+
+  async getPlaylistTracks() {
+    
     let parsed = queryString.parse(window.location.search);
     const accessToken = parsed.access_token;
     await fetch('https://api.spotify.com/v1/users/namnomnom/playlists/7gmwIJu2qG2xRCFb1CmI17/tracks', {
@@ -50,18 +104,15 @@ export default class WebPlayer extends Component {
       .then(data => {
         this.setState({playlistTracks: data.items})
       })
+    
+    console.log(this.state.playlistTracks)
 
-      console.log(this.state.playlistTracks)
   }
 
   openModal() {
     this.setState({modalIsOpen: true});
   }
  
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
-  }
  
   closeModal() {
     this.setState({modalIsOpen: false});
@@ -69,22 +120,29 @@ export default class WebPlayer extends Component {
  
 
 
-  onSearch(e) {
+  async onSearch(e) {
     e.preventDefault();
 
     // store the current promise in case we need to abort it
-    spotifyWebApi.searchTracks(`${this.state.searchTerm}`, {limit: 5}).then(data => {
+    await spotifyWebApi.searchTracks(`${this.state.searchTerm}`, {limit: 6}).then(data => {
       // ...render list of search results...
-      console.log(data);
+      this.setState({
+        searchResults: data
+      })
     }, function(err) {
       console.error(err);
     });
 
+    console.log(this.state.searchResults);
+    this.openModal(); 
+    
+
   }
     
-  onAddSong(){
-    spotifyWebApi.addTracksToPlaylist('7gmwIJu2qG2xRCFb1CmI17',['spotify:track:0s3nnoMeVWz3989MkNQiRf']).then(data => console.log(data));
-    
+  async onAddSong(uri){
+    alert("SAJKDBKAJSDBKS");
+    await spotifyWebApi.addTracksToPlaylist('7gmwIJu2qG2xRCFb1CmI17',[uri]).then(data => console.log(data));
+    this.getPlaylistTracks();
   }
 
   onEnd() {
@@ -116,9 +174,12 @@ export default class WebPlayer extends Component {
     </li>
     ))
 
+    const searches = this.state.searchResults.tracks !== undefined ? this.state.searchResults.tracks.items : [];
+
     return (
       <div className="App">
         <div className="admin-view">
+          <button onClick={this.handleLogin}></button>
           <div className="search-bar-container">
             <img src={search} className="search-bar-icon"/>
              <form onSubmit={this.onSearch} className="form">
@@ -133,28 +194,41 @@ export default class WebPlayer extends Component {
               </label>
             </form>          
           </div>
-          <div>
-            <button onClick={this.openModal}>Open Modal</button>
+
+
+
+
+
+
+
+            { this.state.searchResults.tracks ? 
+            <div>
               <Modal
+                ariaHideApp={false}
                 isOpen={this.state.modalIsOpen}
                 onAfterOpen={this.afterOpenModal}
                 onRequestClose={this.closeModal}
                 style={customStyles}
                 contentLabel="Example Modal"
               >
-        
-                <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
-                <button onClick={this.closeModal}>close</button>
-                <div>I am a modal</div>
-                <form>
-                  <input />
-                  <button>tab navigation</button>
-                  <button>stays</button>
-                  <button>inside</button>
-                  <button>the modal</button>
-                </form>
+              <ul>
+                <li className="search-list"><img className="search-pics" src={searches[0].album.images[1].url}/><p className="search-names"><span className="plus" onClick={() => this.onAddSong(searches[0].uri)}>+</span>{searches[0].name}</p></li>
+                <li className="search-list"><img className="search-pics" src={searches[1].album.images[1].url}/><p className="search-names"><span className="plus" onClick={() => this.onAddSong(searches[1].uri)}>+</span>{searches[1].name}</p></li>
+                <li className="search-list"><img className="search-pics" src={searches[2].album.images[1].url}/><p className="search-names"><span className="plus" onClick={() => this.onAddSong(searches[2].uri)}>+</span>{searches[2].name}</p></li>
+              </ul>
+              <ul>
+                <li className="search-list"><img className="search-pics" src={searches[3].album.images[1].url}/><p className="search-names"><span className="plus" onClick={() => this.onAddSong(searches[3].uri)}>+</span>{searches[3].name}</p></li>
+                <li className="search-list"><img className="search-pics" src={searches[4].album.images[1].url}/><p className="search-names"><span className="plus" onClick={() => this.onAddSong(searches[4].uri)}>+</span>{searches[4].name}</p></li>
+                <li className="search-list"><img className="search-pics" src={searches[5].album.images[1].url}/><p className="search-names"><span className="plus" onClick={() => this.onAddSong(searches[5].uri)}>+</span>{searches[5].name}</p></li>
+              </ul>
               </Modal>
-            </div>
+            </div> : <div></div>
+            }
+
+
+
+
+
           <ul>
             {tracksToPlay}
           </ul>

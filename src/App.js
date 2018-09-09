@@ -41,21 +41,65 @@ class App extends Component {
     }))
   }
 
+
   render() {
+      /* HERE WE DETERMINE IF PERSON NEEDS TO LOGIN */
+
     return (
       <div className="App">
+
+
+
+
         {this.state.user ?
+
+
+
+        /* WE GOT ADMIN AND LISTENER HERE */
+
+
         <div>
+          <h1 style={{...defaultStyle, 
+            'fontSize': '54px',
+            'marginTop': '5px'
+          }}>
+            {this.state.user.name}'s Playlists
+          </h1>
           <WebPlayer />
-        </div> : <button onClick={() => {
-            window.location = window.location.href.includes('localhost') 
-              ? 'http://localhost:8888/login' 
-              : 'https://better-playlists-backend.herokuapp.com/login' }
-          }
-          style={{padding: '20px', 'fontSize': '50px', 'marginTop': '20px'}}>Sign in with Spotify</button>
+        </div> 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        :  <div>
+            <div className="navbar">
+              <h1>Aruba</h1>
+            </div>
+              <div className="intro">
+                <p className="message">JOIN A ROOM</p>
+                <input type="text" id="joinRoomBar" placeholder="Pin" maxlength="4"/>
+                <br />
+                <button className="button button5" onClick={() => {window.location = window.location.href.includes('localhost') ? 'http://localhost:8888/login' : 'https://better-playlists-backend.herokuapp.com/login';}}>Go!</button>
+                <br />
+                <br />
+                <a href="createRoom.html">Create a room</a>
+              </div>
+            </div>
+
         }
-      </div>
-    );
+        </div>
+    )
   }
 }
 

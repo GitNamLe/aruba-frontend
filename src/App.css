@@ -2,6 +2,20 @@ html, body {
   background-color: gray;
 }
 
+.search-list {
+  float: left;
+  width: 33%;
+}
+
+.search-pics {
+  height: 250px;
+}
+
+.plus {
+  color:#1DB954;
+  font-size: 28px;
+}
+
 /* .btn-fade {
   color: #fff;
   cursor: pointer;
@@ -89,6 +103,7 @@ html, body {
 
 .search-bar-input {
   background-color: transparent;
+  color: #fff;
   border: none;
   outline: none;
   height: 100%;
@@ -104,4 +119,79 @@ html, body {
 svg{
   fill: currentColor;
   color: white;
+}
+
+
+
+
+
+
+
+
+/* BRYANNNSS */
+  
+.navbar {
+  overflow: hidden;
+
+  position: fixed;
+  top: 0;
+  height: 100px;
+  width: 100%;
+}
+
+.navbar h1 {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 40px;
+}
+
+
+ /*  body{
+    font-family: 'Merriweather', serif;
+    background-color: black;
+    color: white;
+    background-image: url("danny-howe-365401-unsplash.jpg");
+    background-size: cover;
+  } */
+
+ .button {
+ 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 4px 2px;
+    width: 200px;
+
+    height: 60px;
+    border-radius: 40px;
+    cursor: pointer;
+    background-color: #555555;
+}
+  p.message {
+    position :relative;
+    color: white;
+    font-size: 40px;
+  
+}
+div.intro{
+  text-align: center;
+
+  width: 100%;
+margin-top: 27%;
+  height: 100px;
+
+
+}
+/* Standard syntax */
+@keyframes mymove {
+    from {bottom: 0px;}
+    to {bottom: 200px;}
 }
